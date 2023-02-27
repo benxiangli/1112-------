@@ -194,14 +194,6 @@ score=pd.DataFrame(score)
 score2=pd.merge(name,score,left_on='Username', right_on='id',how='left').drop(['id','信箱'],axis=1)
 score3=score2.sort_values(["組別","Pass",'學號'])
 final_score=pd.DataFrame(score3,columns=["系級","學號","姓名","組別","Pass"])
-# 2023更新：改以xlsx輸出(不想再處理中文漏字問題)，並加入顏色警告
-
-# https://techoverflow.net/2021/09/24/pandas-xlsx-export-with-background-color-based-on-cell-value/
-for cell, in worksheet[f'E2:E{len(final_score) + 1}']: # Skip header row, process as many rows as there are DataFrames
-        value = final_score["Pass"].iloc[cell.row - 2] # value is "True" or "False"
-        cell.fill = PatternFill("solid", start_color=("5cb800" if value == "Pass" else 'ff2800'))
-writer.save()
-writer.close()
 
 all_stu=len(final_score)
 all_len_unfstu=len(final_score[final_score.Pass!='Pass'])
@@ -230,12 +222,20 @@ data2 = { 'message': message2 }
 if (Totime>=datetime.strptime('08:00:00','%H:%M:%S')) and (Totime<=datetime.strptime('10:00:00','%H:%M:%S')):
     requests.post("https://notify-api.line.me/api/notify",
     headers = headers, data = data)
+    # 2023更新：改以xlsx輸出(不想再處理中文漏字問題)，並加入顏色警告
     #顏色標記參照https://stackoverflow.com/questions/54109548/how-to-save-pandas-to-excel-with-different-colors 和 https://xlsxwriter.readthedocs.io/working_with_conditional_formats.html
     writer = pd.ExcelWriter('1112航測完成名單.xlsx', mode='a', engine='openpyxl', if_sheet_exists='new')
 
     final_score.to_excel(writer, sheet_name='{}完成名單'.format(today),index=False)
 
     worksheet = writer.sheets['{}完成名單'.format(today)]
+    
+    # https://techoverflow.net/2021/09/24/pandas-xlsx-export-with-background-color-based-on-cell-value/
+    for cell, in worksheet[f'E2:E{len(final_score) + 1}']: # Skip header row, process as many rows as there are DataFrames
+            value = final_score["Pass"].iloc[cell.row - 2] # value is "True" or "False"
+            cell.fill = PatternFill("solid", start_color=("5cb800" if value == "Pass" else 'ff2800'))
+    writer.save()
+    writer.close()
 
 else:
     requests.post("https://notify-api.line.me/api/notify",
