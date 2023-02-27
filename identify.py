@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 import re
 import time
 import random
@@ -16,7 +17,7 @@ from fake_useragent import UserAgent
 name=pd.read_excel("../1112航測分組.xlsx")
 memo=pd.read_excel('../1112教學日誌.xlsx')
 #個人隱私資料：分享前應先銷毀PPI資料文字檔
-PPI = open('../PPI.txt', 'r')
+PPI = open('../PPI.txt', 'r',encoding="utf-8")
 PP_Information=[]
 for line in PPI.readlines():
     PP_Information.append(line.split('：')[1])
