@@ -29,6 +29,8 @@ TodayDateAndTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 #正式用：辨識目前時間
 Today = datetime.now().strftime('%Y-%m-%d')
 Today = datetime.strptime(Today,'%Y-%m-%d')
+Totime = datetime.now().strftime('%H:%M:%S')
+Totime = datetime.strptime(Totime,'%H:%M:%S')
 #測試用：固定時間
 #Today = datetime.strptime('2023-02-23','%Y-%m-%d')
 print("開始執行時間", TodayDateAndTime)
@@ -193,12 +195,6 @@ score2=pd.merge(name,score,left_on='Username', right_on='id',how='left').drop(['
 score3=score2.sort_values(["組別","Pass",'學號'])
 final_score=pd.DataFrame(score3,columns=["系級","學號","姓名","組別","Pass"])
 # 2023更新：改以xlsx輸出(不想再處理中文漏字問題)，並加入顏色警告
-#顏色標記參照https://stackoverflow.com/questions/54109548/how-to-save-pandas-to-excel-with-different-colors 和 https://xlsxwriter.readthedocs.io/working_with_conditional_formats.html
-writer = pd.ExcelWriter('1112航測完成名單.xlsx', mode='a', engine='openpyxl', if_sheet_exists='new')
-
-final_score.to_excel(writer, sheet_name='{}完成名單'.format(today),index=False)
-
-worksheet = writer.sheets['{}完成名單'.format(today)]
 
 # https://techoverflow.net/2021/09/24/pandas-xlsx-export-with-background-color-based-on-cell-value/
 for cell, in worksheet[f'E2:E{len(final_score) + 1}']: # Skip header row, process as many rows as there are DataFrames
@@ -225,13 +221,25 @@ data = { 'message': message }
 
 # 以 requests 發送 POST 請求
 #requests.post("https://notify-api.line.me/api/notify",headers = headers, data = data, files = files)
-requests.post("https://notify-api.line.me/api/notify",
-    headers = headers, data = data)
 
 weekmemo=memo[memo.週數==today].reset_index(drop=True)
 message2 = '午安~以下為課程預報\r\n{0}--{1}\r\n\n課程影片進度：\r\n{2}\r\n\n預計實作安排：\r\n{3}\r\n\n課程備註：\r\n{4}\r\n\n影片進度未完成人數：{5}人\r\n(完成率：{6:.2%})'.format(Today,today,weekmemo.課程介紹[0],weekmemo.實習[0],weekmemo.備註[0],all_len_unfstu,(all_stu-all_len_unfstu)/all_stu)
 data2 = { 'message': message2 }
-requests.post("https://notify-api.line.me/api/notify",
-    headers = headers, data = data2)
+
+#時間管理
+if (Totime>=datetime.strptime('08:00:00','%H:%M:%S')) and (Totime<=datetime.strptime('10:00:00','%H:%M:%S')):
+    requests.post("https://notify-api.line.me/api/notify",
+    headers = headers, data = data)
+    #顏色標記參照https://stackoverflow.com/questions/54109548/how-to-save-pandas-to-excel-with-different-colors 和 https://xlsxwriter.readthedocs.io/working_with_conditional_formats.html
+    writer = pd.ExcelWriter('1112航測完成名單.xlsx', mode='a', engine='openpyxl', if_sheet_exists='new')
+
+    final_score.to_excel(writer, sheet_name='{}完成名單'.format(today),index=False)
+
+    worksheet = writer.sheets['{}完成名單'.format(today)]
+
+else:
+    requests.post("https://notify-api.line.me/api/notify",
+        headers = headers, data = data2)
+
 
 
