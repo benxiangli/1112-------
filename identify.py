@@ -3,11 +3,11 @@ import re
 import time
 import random
 import requests
-import xlsxwriter
 import pandas as pd
 import dataframe_image as dfi
 from selenium import webdriver
 from bs4 import BeautifulSoup
+from openpyxl.styles import PatternFill
 from datetime import datetime, timedelta
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -27,9 +27,9 @@ passw = PP_Information[1] #課程平台密碼
 
 TodayDateAndTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 #正式用：辨識目前時間
-#Today = datetime.now().strftime('%Y-%m-%d')
+Today = datetime.now().strftime('%Y-%m-%d')
 #測試用：固定時間
-Today = datetime.strptime('2023-03-01','%Y-%m-%d')
+#Today = datetime.strptime('2023-02-23','%Y-%m-%d')
 print("開始執行時間", TodayDateAndTime)
 
 # 2023更新：加入週次時間管理(但每年仍須更新)
@@ -192,20 +192,16 @@ score3=score2.sort_values(["組別","Pass",'學號'])
 final_score=pd.DataFrame(score3,columns=["系級","學號","姓名","組別","Pass"])
 # 2023更新：改以xlsx輸出(不想再處理中文漏字問題)，並加入顏色警告
 #顏色標記參照https://stackoverflow.com/questions/54109548/how-to-save-pandas-to-excel-with-different-colors 和 https://xlsxwriter.readthedocs.io/working_with_conditional_formats.html
-writer = pd.ExcelWriter('航測測試完成名單.xlsx', engine='xlsxwriter')
+writer = pd.ExcelWriter('1112航測完成名單.xlsx', mode='a', engine='openpyxl')
 
 final_score.to_excel(writer, sheet_name='{}完成名單'.format(today),index=False)
 
-workbook  = writer.book
 worksheet = writer.sheets['{}完成名單'.format(today)]
 
-format1 = workbook.add_format({'bg_color': '#FFC7CE','font_color': '#9C0006'})
-
-worksheet.conditional_format('E1:E{}'.format(len(final_score)),
-                             {'type':     'text',
-                              'criteria': 'not containing',
-                              'value':    'Pass',
-                              'format':   format1})
+# https://techoverflow.net/2021/09/24/pandas-xlsx-export-with-background-color-based-on-cell-value/
+for cell, in worksheet[f'E2:E{len(final_score) + 1}']: # Skip header row, process as many rows as there are DataFrames
+        value = final_score["Pass"].iloc[cell.row - 2] # value is "True" or "False"
+        cell.fill = PatternFill("solid", start_color=("5cb800" if value == "Pass" else 'ff2800'))
 writer.save()
 writer.close()
 
