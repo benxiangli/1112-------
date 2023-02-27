@@ -13,10 +13,10 @@ from selenium.webdriver.chrome.options import Options
 from fake_useragent import UserAgent
 
 #導入課程資訊
-name=pd.read_excel("1112航測分組.xlsx")
-memo=pd.read_excel('1112教學日誌.xlsx')
+name=pd.read_excel("../1112航測分組.xlsx")
+memo=pd.read_excel('../1112教學日誌.xlsx')
 #個人隱私資料：分享前應先銷毀PPI資料文字檔
-PPI = open('PPI.txt', 'r')
+PPI = open('../PPI.txt', 'r')
 PP_Information=[]
 for line in PPI.readlines():
     PP_Information.append(line.split('：')[1])
@@ -166,41 +166,30 @@ for i in range (0,len(dit)):
     score["Week13"].append('==')
     #PASS這邊每周要人工更新(尚未想到自動化的方法)
     if dayint==1:
-        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' else "N")
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' else "N")
     if dayint==2:
         score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' else "N")
     if dayint==3:
-        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' else "N")
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' else "N")
     if dayint==4:
-        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' else "N")
-    if dayint==1:
-        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' else "N")
-    if dayint==1:
-        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' else "N")
-    if dayint==1:
-        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' else "N")
-    if dayint==1:
-        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' else "N")
-    if dayint==1:
-        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' else "N")
-    if dayint==1:
-        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' else "N")
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' else "N")
+    if dayint==5:
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' else "N")
+    if dayint==6:
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' else "N")
+    if dayint==9:
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' and str(score["Week9"][i])=='Y' else "N")
+    if dayint==10:
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' and str(score["Week9"][i])=='Y' and str(score["Week10"][i])=='Y' else "N")
+    if dayint==12:
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' and str(score["Week9"][i])=='Y' and str(score["Week10"][i])=='Y' and str(score["Week12"][i])=='Y' else "N")
+    if dayint==13:
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' and str(score["Week9"][i])=='Y' and str(score["Week10"][i])=='Y' and str(score["Week12"][i])=='Y' and str(score["Week13"][i])=='Y' else "N")
 score=pd.DataFrame(score)
-
-# %%
 score2=pd.merge(name,score,left_on='Username', right_on='id',how='left').drop(['id','信箱'],axis=1)
-
-# %%
-def warming(w):
-    color = 'red' if w=="N" else ''
-    return f'background-color: {color}'
 score3=score2.sort_values(["組別","Pass",'學號'])
-score3.style.applymap(warming, subset=pd.IndexSlice[:,:])
-
-# %%
 final_score=pd.DataFrame(score3,columns=["系級","學號","姓名","組別","Pass"])
 # 2023更新：改以xlsx輸出(不想再處理中文漏字問題)，並加入顏色警告
-#final_score.to_csv('航測第四周完成名單.csv',encoding='big5-hkscs',errors='ignore')
 #顏色標記參照https://stackoverflow.com/questions/54109548/how-to-save-pandas-to-excel-with-different-colors 和 https://xlsxwriter.readthedocs.io/working_with_conditional_formats.html
 writer = pd.ExcelWriter('航測測試完成名單.xlsx', engine='xlsxwriter')
 
@@ -219,18 +208,15 @@ worksheet.conditional_format('E1:E{}'.format(len(final_score)),
 writer.save()
 writer.close()
 
-# %%
 all_stu=len(final_score)
 all_len_unfstu=len(final_score[final_score.Pass!='Pass'])
 all_unstu=final_score[final_score.Pass!='Pass']['姓名']
 
-# %%
 # 2023年更新：加入Line Notify執行「成績統計完成後自動通知」任務
 # Line Notify實作參考見https://github.com/jiangsir/PythonBasic/blob/master/%E5%AF%A6%E4%BD%9C--%E5%82%B3%E9%80%81Line%20%E8%A8%8A%E6%81%AF.ipynb
 token = PP_Information[2] # LINE Notify 權杖
 message = '早安!!成績已統計完成\r\n本周是課程的{4}\r\n統計開始時間：{0}\r\n修課學生總數：{1}\r\n未完成作業人數：{2}\r\n未完成作業同學：\r\n{3}'.format(TodayDateAndTime,all_stu,all_len_unfstu,all_unstu,today)
 
-# %%
 # HTTP 標頭參數與資料
 headers = {
     "Authorization": "Bearer " + token, 
@@ -243,7 +229,6 @@ data = { 'message': message }
 requests.post("https://notify-api.line.me/api/notify",
     headers = headers, data = data)
 
-# %%
 weekmemo=memo[memo.週數==today].reset_index(drop=True)
 message2 = '午安~以下為課程預報\r\n{0}--{1}\r\n\n課程影片進度：\r\n{2}\r\n\n預計實作安排：\r\n{3}\r\n\n課程備註：\r\n{4}\r\n\n影片進度未完成人數：{5}人\r\n(完成率：{6:.2%})'.format(Today,today,weekmemo.課程介紹[0],weekmemo.實習[0],weekmemo.備註[0],all_len_unfstu,(all_stu-all_len_unfstu)/all_stu)
 data2 = { 'message': message2 }
