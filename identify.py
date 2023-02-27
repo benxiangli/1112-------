@@ -28,6 +28,7 @@ passw = PP_Information[1] #課程平台密碼
 TodayDateAndTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 #正式用：辨識目前時間
 Today = datetime.now().strftime('%Y-%m-%d')
+Today = datetime.strptime(Today,'%Y-%m-%d')
 #測試用：固定時間
 #Today = datetime.strptime('2023-02-23','%Y-%m-%d')
 print("開始執行時間", TodayDateAndTime)
@@ -45,7 +46,8 @@ def today_to_week():
         date.append((dt+timedelta(days=7*i)).strftime('%Y-%m-%d'))
     week_date=pd.DataFrame({'week':week,'date':date})
     week_date[week_date.date==Today].week
-    todayweek=week_date.loc[week_date.date<=Today+timedelta(days=1), 'week'].iloc[-1]
+    nextdate=(Today+timedelta(days=1))
+    todayweek=week_date.loc[week_date.date<=nextdate, 'week'].iloc[-1]
     return todayweek
 today=today_to_week()
 dayint=re.findall(r'\d+',today)
@@ -192,7 +194,7 @@ score3=score2.sort_values(["組別","Pass",'學號'])
 final_score=pd.DataFrame(score3,columns=["系級","學號","姓名","組別","Pass"])
 # 2023更新：改以xlsx輸出(不想再處理中文漏字問題)，並加入顏色警告
 #顏色標記參照https://stackoverflow.com/questions/54109548/how-to-save-pandas-to-excel-with-different-colors 和 https://xlsxwriter.readthedocs.io/working_with_conditional_formats.html
-writer = pd.ExcelWriter('1112航測完成名單.xlsx', mode='a', engine='openpyxl')
+writer = pd.ExcelWriter('1112航測完成名單.xlsx', mode='a', engine='openpyxl', if_sheet_exists='new')
 
 final_score.to_excel(writer, sheet_name='{}完成名單'.format(today),index=False)
 
