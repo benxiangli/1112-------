@@ -28,9 +28,9 @@ pause
 ```
 ### PPI.txt **(必要文件)**
 個人資料檔，內容依順序分別為
-1. 課程平台電子郵件(需使用課程管理者/助教郵件)
-2. 課程平台密碼
-3.LINE NOTIFY權杖(有關LINE NOTIFY如何設定及指定傳送群組位置可參考[jiangsir文章：實作--傳送Line 訊息.ipynb](https://github.com/jiangsir/PythonBasic/blob/master/%E5%AF%A6%E4%BD%9C--%E5%82%B3%E9%80%81Line%20%E8%A8%8A%E6%81%AF.ipynb))  
+1. 課程平台電子郵件(需使用課程管理者/助教郵件)  
+2. 課程平台密碼  
+3. LINE NOTIFY權杖(有關LINE NOTIFY如何設定及指定傳送群組位置可參考[jiangsir文章：實作--傳送Line 訊息.ipynb](https://github.com/jiangsir/PythonBasic/blob/master/%E5%AF%A6%E4%BD%9C--%E5%82%B3%E9%80%81Line%20%E8%A8%8A%E6%81%AF.ipynb))  
 
 此文字檔務必以全形`：`分段
 
