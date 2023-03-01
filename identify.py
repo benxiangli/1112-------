@@ -202,7 +202,9 @@ all_unstu=final_score[final_score.Pass!='Pass']['姓名']
 # 2023年更新：加入Line Notify執行「成績統計完成後自動通知」任務
 # Line Notify實作參考見https://github.com/jiangsir/PythonBasic/blob/master/%E5%AF%A6%E4%BD%9C--%E5%82%B3%E9%80%81Line%20%E8%A8%8A%E6%81%AF.ipynb
 token = PP_Information[2] # LINE Notify 權杖
+weekmemo=memo[memo.週數==today].reset_index(drop=True)
 message = '早安!!成績已統計完成\r\n本周是課程的{4}\r\n統計開始時間：{0}\r\n修課學生總數：{1}\r\n未完成作業人數：{2}\r\n未完成作業同學：\r\n{3}'.format(TodayDateAndTime,all_stu,all_len_unfstu,all_unstu,today)
+message3 = '提醒您今日課程安排：\r\n{0}\r\n\n課程備註：\r\n{1}'.format(weekmemo.實習[0],weekmemo.備註[0])
 
 # HTTP 標頭參數與資料
 headers = {
@@ -210,18 +212,20 @@ headers = {
     "Content-Type" : "application/x-www-form-urlencoded"
 }
 data = { 'message': message }
+data3 = { 'message': message3 }
 
-# 以 requests 發送 POST 請求
-#requests.post("https://notify-api.line.me/api/notify",headers = headers, data = data, files = files)
-
-weekmemo=memo[memo.週數==today].reset_index(drop=True)
 message2 = '午安~以下為課程預報\r\n{0}--{1}\r\n\n課程影片進度：\r\n{2}\r\n\n預計實作安排：\r\n{3}\r\n\n課程備註：\r\n{4}\r\n\n影片進度未完成人數：{5}人\r\n(完成率：{6:.2%})'.format(Today,today,weekmemo.課程介紹[0],weekmemo.實習[0],weekmemo.備註[0],all_len_unfstu,(all_stu-all_len_unfstu)/all_stu)
 data2 = { 'message': message2 }
 
+# 以 requests 發送 POST 請求
+#requests.post("https://notify-api.line.me/api/notify",headers = headers, data = data, files = files)
 #時間管理
 if (Totime>=datetime.strptime('08:00:00','%H:%M:%S')) and (Totime<=datetime.strptime('10:00:00','%H:%M:%S')):
     requests.post("https://notify-api.line.me/api/notify",
     headers = headers, data = data)
+    time.sleep(3)
+    requests.post("https://notify-api.line.me/api/notify",
+    headers = headers, data = data3)
     # 2023更新：改以xlsx輸出(不想再處理中文漏字問題)，並加入顏色警告
     #顏色標記參照https://xlsxwriter.readthedocs.io/working_with_conditional_formats.html or https://techoverflow.net/2021/09/24/pandas-xlsx-export-with-background-color-based-on-cell-value/
     writer = pd.ExcelWriter('../1112航測完成名單.xlsx', mode='a', engine='openpyxl', if_sheet_exists='new')
