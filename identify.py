@@ -154,7 +154,7 @@ for i in range (0,len(dit)):
     else:
         score["Week3"].append('==')
     if dayint>=4:
-        score["Week4"].append("Y" if int(dit["LB 07"][i])>25 and int(dit["LB 08"][i])==100 else "N")
+        score["Week4"].append("Y" if int(dit["LB 08"][i])==100 else "N")
     else:
         score["Week4"].append('==')
     if dayint>=5:
@@ -162,7 +162,7 @@ for i in range (0,len(dit)):
     else:
         score["Week5"].append('==')
     if dayint>=6:
-        score["Week6"].append("Y" if int(dit["LB 11"][i])==100 and int(dit["LB 12"][i])==100 else "N")
+        score["Week6"].append("Y" if int(dit["LB 07"][i])>25 and int(dit["LB 11"][i])==100 and int(dit["LB 12"][i])==100 else "N")
     else:
         score["Week6"].append('==')
     score["Week9"].append('==')
