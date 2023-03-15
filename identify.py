@@ -4,7 +4,6 @@ import time
 import random
 import requests
 import pandas as pd
-import dataframe_image as dfi
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from openpyxl.styles import PatternFill
