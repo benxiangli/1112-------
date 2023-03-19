@@ -8,7 +8,7 @@
 + 加入Line Notify功能
 
 ### 更新內容(2023.03.19)
-+關閉selenium webdriver視窗顯示
++ 關閉selenium webdriver視窗顯示
 
 ---
 ## 流程說明
