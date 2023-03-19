@@ -10,6 +10,7 @@ from openpyxl.styles import PatternFill
 from datetime import datetime, timedelta
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.edge.options import Options
 from fake_useragent import UserAgent
 
 #導入課程資訊
@@ -56,14 +57,15 @@ dayint=re.findall(r'\d+',today)
 delay_choices = [3, 1, 2]  #延遲的秒數
 delay = random.choice(delay_choices)  #隨機選取秒數
 
-options = Options()
-options.add_argument("--disable-notifications") #取消網頁中的彈出視窗，避免妨礙網路爬蟲的執行
+web_options = Options()
+web_options.add_argument("--disable-notifications") #取消網頁中的彈出視窗，避免妨礙網路爬蟲的執行
+web_options.add_argument("--headless") # 2023更新：加入"--headless"不顯示視窗
 
 user_agent = UserAgent()
 try:
-    browser = webdriver.Chrome('./chromedriver.exe')
+    browser = webdriver.Chrome('./chromedriver.exe',options=web_options)
 except:
-    browser = webdriver.Edge('./msedgedriver.exe')
+    browser = webdriver.Edge('./msedgedriver.exe',options=web_options)
 browser.implicitly_wait(10) # 等待頁面好 10秒內
 url = 'http://gis519.logyuan.idv.tw/dashboard'
 browser.get(url) # 前往指定網址
