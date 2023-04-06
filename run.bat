@@ -1,5 +1,5 @@
 REM @echo off
-cd /d C:\Users\xiang\Desktop\1112èˆªæ¸¬è³‡æ–™\1112èˆªæ¸¬æˆç¸¾è¾¨è­˜å›
+cd /d C:\Users\xiang\Desktop\1112¯è´ú¸ê®Æ\1112¯è´ú¦¨ÁZ¿ëÃÑ§g
 call C:/Users/xiang/anaconda3/Scripts/activate
 call conda activate pywebcrawler
 call python identify.py

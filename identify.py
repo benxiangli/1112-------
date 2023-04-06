@@ -183,6 +183,10 @@ for i in range (0,len(dit)):
         score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' else "N")
     if dayint==6:
         score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' else "N")
+    if dayint==7:
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' else "N")
+    if dayint==8:
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' else "N")
     if dayint==9:
         score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' and str(score["Week9"][i])=='Y' else "N")
     if dayint==10:
