@@ -188,13 +188,15 @@ for i in range (0,len(dit)):
     if dayint==8:
         score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' else "N")
     if dayint==9:
-        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' and str(score["Week9"][i])=='Y' else "N")
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' else "N")
     if dayint==10:
-        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' and str(score["Week9"][i])=='Y' and str(score["Week10"][i])=='Y' else "N")
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' else "N")
+    if dayint==11:
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' else "N")
     if dayint==12:
-        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' and str(score["Week9"][i])=='Y' and str(score["Week10"][i])=='Y' and str(score["Week12"][i])=='Y' else "N")
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' else "N")
     if dayint==13:
-        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' and str(score["Week9"][i])=='Y' and str(score["Week10"][i])=='Y' and str(score["Week12"][i])=='Y' and str(score["Week13"][i])=='Y' else "N")
+        score["Pass"].append("Pass" if str(score["Week1"][i])=='Y' and str(score["Week2"][i])=='Y' and str(score["Week3"][i])=='Y' and str(score["Week4"][i])=='Y' and str(score["Week5"][i])=='Y' and str(score["Week6"][i])=='Y' else "N")
 score=pd.DataFrame(score)
 score2=pd.merge(name,score,left_on='Username', right_on='id',how='left').drop(['id','信箱'],axis=1)
 score3=score2.sort_values(["組別","Pass",'學號'])
