@@ -10,12 +10,17 @@ from openpyxl.styles import PatternFill
 from datetime import datetime, timedelta
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.edge.options import Options
 from fake_useragent import UserAgent
 
+# 2024:修正工作路徑
+import os
+print(os.getcwd())
+os.chdir(os.path.dirname(__file__))
+print(os.getcwd())
+
 #導入課程資訊
-name=pd.read_excel("../1112航測分組.xlsx")
-memo=pd.read_excel('../1112教學日誌.xlsx')
+name=pd.read_excel("../1122航測分組.xlsx")
+memo=pd.read_excel('../1122教學日誌.xlsx')
 #個人隱私資料：分享前應先銷毀PPI資料文字檔
 PPI = open('../PPI.txt', 'r',encoding="utf-8")
 PP_Information=[]
@@ -32,20 +37,18 @@ Today = datetime.strptime(Today,'%Y-%m-%d')
 Totime = datetime.now().strftime('%H:%M:%S')
 Totime = datetime.strptime(Totime,'%H:%M:%S')
 #測試用：固定時間
-#Today = datetime.strptime('2023-02-23','%Y-%m-%d')
+#Today = datetime.strptime('2024-02-27','%Y-%m-%d')
 print("開始執行時間", TodayDateAndTime)
 
 # 2023更新：加入週次時間管理(但每年仍須更新)
 def today_to_week():
     week=[]
     date=[]
-    start_date='2023-02-16'
+    start_date='2024-02-20'
     dt=datetime.strptime(start_date,'%Y-%m-%d')
-    week.append('week0')
-    date.append(dt)
-    for i in range(1,18):
+    for i in range(0,18):
         week.append('week{}'.format(i))
-        date.append((dt+timedelta(days=7*i)).strftime('%Y-%m-%d'))
+        date.append((dt+timedelta(days=7*i)))
     week_date=pd.DataFrame({'week':week,'date':date})
     week_date[week_date.date==Today].week
     nextdate=(Today+timedelta(days=1))
@@ -62,10 +65,7 @@ web_options.add_argument("--disable-notifications") #取消網頁中的彈出視
 web_options.add_argument("--headless") # 2023更新：加入"--headless"不顯示視窗
 
 user_agent = UserAgent()
-try:
-    browser = webdriver.Chrome('./chromedriver.exe',options=web_options)
-except:
-    browser = webdriver.Edge('./msedgedriver.exe',options=web_options)
+browser = webdriver.Chrome('./chromedriver',options=web_options)
 browser.implicitly_wait(10) # 等待頁面好 10秒內
 url = 'http://gis519.logyuan.idv.tw/dashboard'
 browser.get(url) # 前往指定網址
@@ -81,10 +81,10 @@ password.send_keys(passw)
 button = browser.find_element(By.CLASS_NAME, "action.action-primary.action-update.js-login.login-button").click()
 time.sleep(delay)
 
-url = 'http://gis519.logyuan.idv.tw/courses/course-v1:Pccu_Geography+256600+2023_03/course/'
+url = 'http://gis519.logyuan.idv.tw/courses/course-v1:Pccu_Geography+256600+202402/course/'
 browser.get(url) # 前往指定網址
 time.sleep(delay)
-url = 'http://gis519.logyuan.idv.tw/courses/course-v1:Pccu_Geography+256600+2023_03/instructor#view-course_info'
+url = 'http://gis519.logyuan.idv.tw/courses/course-v1:Pccu_Geography+256600+202402/instructor#view-course_info'
 browser.get(url) # 前往指定網址
 time.sleep(delay)
 button = browser.find_element(By.CLASS_NAME,"btn-link.student_admin").click()
@@ -227,7 +227,7 @@ data2 = { 'message': message2 }
 # 以 requests 發送 POST 請求
 #requests.post("https://notify-api.line.me/api/notify",headers = headers, data = data, files = files)
 #時間管理
-if (Totime>=datetime.strptime('08:00:00','%H:%M:%S')) and (Totime<=datetime.strptime('10:00:00','%H:%M:%S')):
+if (Totime>=datetime.strptime('07:00:00','%H:%M:%S')) and (Totime<=datetime.strptime('09:00:00','%H:%M:%S')):
     requests.post("https://notify-api.line.me/api/notify",
     headers = headers, data = data)
     time.sleep(3)
@@ -235,7 +235,7 @@ if (Totime>=datetime.strptime('08:00:00','%H:%M:%S')) and (Totime<=datetime.strp
     headers = headers, data = data3)
     # 2023更新：改以xlsx輸出(不想再處理中文漏字問題)，並加入顏色警告
     #顏色標記參照https://xlsxwriter.readthedocs.io/working_with_conditional_formats.html or https://techoverflow.net/2021/09/24/pandas-xlsx-export-with-background-color-based-on-cell-value/
-    writer = pd.ExcelWriter('../1112航測完成名單.xlsx', mode='a', engine='openpyxl', if_sheet_exists='new')
+    writer = pd.ExcelWriter('../1122航測完成名單.xlsx', mode='a', engine='openpyxl', if_sheet_exists='new')
 
     final_score.to_excel(writer, sheet_name='{}完成名單'.format(today),index=False)
 
@@ -244,12 +244,9 @@ if (Totime>=datetime.strptime('08:00:00','%H:%M:%S')) and (Totime<=datetime.strp
     for cell, in worksheet[f'E2:E{len(final_score) + 1}']: # Skip header row, process as many rows as there are DataFrames
             value = final_score["Pass"].iloc[cell.row - 2] # value is "True" or "False"
             cell.fill = PatternFill("solid", start_color=("5cb800" if value == "Pass" else 'ff2800'))
-    writer.save()
+    writer._save()
     writer.close()
 
 else:
     requests.post("https://notify-api.line.me/api/notify",
         headers = headers, data = data2)
-
-
-
